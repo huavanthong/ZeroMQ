@@ -11,7 +11,13 @@ int main()
 
 	{
 		std::vector<std::string> topics{ "intc", "amd" };
+
+
 		for (auto&& topic : topics)
+			// #### At old version ZeroMQ, we use setsockopt to set option ####
+			// sock.setsockopt(ZMQ_SUBSCRIBE, topic.data(), topic.size());
+			// ZMQ_CPP11_DEPRECATED("from 4.7.0, use `set` taking option from zmq::sockopt") 
+			// #### Refer: https://github.com/zeromq/cppzmq/issues/403
 			sock.set(zmq::sockopt::subscribe, topic);
 	}
 
