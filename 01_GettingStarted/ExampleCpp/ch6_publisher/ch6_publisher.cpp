@@ -27,7 +27,7 @@ int main()
 	std::random_device rd;
 	std::mt19937 mt(rd());
 	std::normal_distribution<double> normdist(0., 0.1);
-	std::uniform_int_distribution<int> udist(0, 100);
+	std::uniform_int_distribution<int> udist(0, 2);
 
 	while (1) {
 		std::this_thread::sleep_for(200ms);
