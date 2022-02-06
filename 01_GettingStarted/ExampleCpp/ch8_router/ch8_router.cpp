@@ -13,7 +13,7 @@ int main()
 
     while (1) {
         zmq::message_t msg;
-        std::cout << "\n Router receive message from dealer A";
+        std::cout << "\n Step 2: Router receive message from dealer A";
         std::vector<zmq::message_t> rcv_msgs;
 
         auto res = zmq::recv_multipart(sock, std::back_inserter(rcv_msgs));
@@ -26,6 +26,7 @@ int main()
             }
         }
 
+        std::cout << "\n Step 3: Router send message to dealer B";
         sock.send(zmq::str_buffer("strat_B"), zmq::send_flags::sndmore);
         sock.send(rcv_msgs[1], zmq::send_flags::none);
     }

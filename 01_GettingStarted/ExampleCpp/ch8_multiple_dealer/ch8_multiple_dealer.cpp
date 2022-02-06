@@ -28,7 +28,7 @@ auto funcA = [](std::string origin_id)
 
 
     while (1) {
-        std::cout << "\n DealerA send message to Router ";
+        std::cout << "\n Step 1: DealerA send message to Router ";
 
         nlohmann::json jmsg;
         jmsg["randvar"] = normdist(mt);
@@ -53,7 +53,7 @@ auto funcB = [](std::string origin_id)
     std::normal_distribution<double> normdist(0., 1.);
 
     while (1) {
-        std::cout << "\n DealerB receive message from Router ";
+        std::cout << "\n Step 4: DealerB receive message from Router ";
         std::vector<zmq::message_t> recv_msgs;
 
         auto res = zmq::recv_multipart(sock, std::back_inserter(recv_msgs));
