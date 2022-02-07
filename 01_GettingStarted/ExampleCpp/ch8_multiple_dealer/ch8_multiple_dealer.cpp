@@ -58,8 +58,10 @@ auto funcB = [](std::string origin_id)
 
         auto res = zmq::recv_multipart(sock, std::back_inserter(recv_msgs));
 
-        for (auto&& msg : recv_msgs)
-            std::cout << "\n" << msg.to_string();
+        for (auto&& msg : recv_msgs) {
+            std::cout << "\n [------ multipart format ------] " << msg;
+            std::cout << "\n [------ string format:   ------]" << msg.to_string();
+        }
     }
 };
 
