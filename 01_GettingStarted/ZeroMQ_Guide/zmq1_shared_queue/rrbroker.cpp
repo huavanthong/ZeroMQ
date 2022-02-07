@@ -32,44 +32,61 @@ int main(void)
 
         if (items[0].revents & ZMQ_POLLIN) {
 
+            std::string msg_out;
+
             while (1) {
                 //  Process all parts of the message
                 auto res = zmq::recv_multipart(frontend, std::back_inserter(rcv_msgs));
 
                 if (res.has_value())
                 {
-                    std::cout << "\Front end receive message\n";
+                    std::cout << "\nBroker receive message from Frontend";
+
+                    msg_out = rcv_msgs.back().to_string();
+                    std::cout << "\nMessage out: " << msg_out;
+
+                    int pos = 0;
                     for (auto& msg : rcv_msgs) {
-                        std::cout << "\n" << msg;
+                        std::cout << "\n" << msg << " at pos: " << pos;
+                        pos++;
                     }
                 }
 
-                //if (!more)
-                //    break;      //  Last message part
+                zmq::message_t z_out(msg_out);
+                std::cout << "\nBroker send message to Backend";
+                backend.send(rcv_msgs[0], zmq::send_flags::sndmore);
+                backend.send(rcv_msgs[2], zmq::send_flags::none);
+
             }
 
         }
 
         if (items[1].revents & ZMQ_POLLIN) {
+
+            std::string msg_out;
+
             while (1) {
                 //  Process all parts of the message
                 auto res = zmq::recv_multipart(backend, std::back_inserter(rcv_msgs));
 
                 if (res.has_value())
                 {
-                    std::cout << "\Back end receive message\n";
+                    std::cout << "\Broker receive message from Backend\n";
+                    msg_out = rcv_msgs.back().to_string();
+                    std::cout << "\nMessage out: " << msg_out;
+
+                    int pos = 0;
                     for (auto& msg : rcv_msgs) {
-                        std::cout << "\n" << msg;
+                        std::cout << "\n" << msg << "at pos: " << pos;
+                        pos++;
                     }
                 }
 
-                /*
-                int more = zmq_msg_more(&message);
-                zmq_msg_send(&message, frontend, more ? ZMQ_SNDMORE : 0);
-                zmq_msg_close(&message);
-                if (!more)
-                    break;      //  Last message part
-                */
+                std::cout << "\Broker send message to Frontend\n";
+                zmq::message_t z_out(msg_out);
+                frontend.send(rcv_msgs[0], zmq::send_flags::sndmore);
+                frontend.send(rcv_msgs[2], zmq::send_flags::none);
+
             }
         }
     }
